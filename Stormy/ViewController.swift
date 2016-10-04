@@ -12,6 +12,16 @@ extension CurrentWeather {
     var temperatureString: String {
         return "\(Int(temperature))º"
     }
+    
+    var humidityString: String {
+        let percentageValue = Int(humidity * 100)
+        return "\(percentageValue)%"
+    }
+    
+    var precipitationProbabilityString: String {
+        let percentageValue = Int(precipitationProbabily * 100)
+        return "\(percentageValue)%"
+    }
 }
 
 class ViewController: UIViewController {
@@ -41,6 +51,10 @@ class ViewController: UIViewController {
     
     func display(weather: CurrentWeather) {
         currentTemperatureLabel.text = weather.temperatureString
+        currentPrecipitationLabel.text = weather.precipitationProbabilityString
+        currentHumidityLabel.text = weather.humidityString
+        currentSummaryLabel.text = weather.summary
+        currentWeatherIcon.image = weather.icon
     }
 
 
