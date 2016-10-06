@@ -34,14 +34,24 @@ class ViewController: UIViewController {
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    lazy var forecastAPIClient = ForecastAPIClient(APIKey: "")
+    lazy var forecastAPIClient = ForecastAPIClient(APIKey: "ADD YOUR API KEY HERE")
     let coordinate = Coordinate(latitude: 37.8267, longitude: -122.423)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+        fetchCurrentWeather()
+    }
+    
+    func fetchCurrentWeather() {
         forecastAPIClient.fetchCurrentWeather(coordinate: coordinate) { result in
+            self.toggleRefreshAnimation(on: false)
+            
             switch result {
             case .Success(let currentWeather):
                 DispatchQueue.main.async {
@@ -55,11 +65,6 @@ class ViewController: UIViewController {
                 break
             }
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func display(weather: CurrentWeather) {
@@ -78,5 +83,19 @@ class ViewController: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
 
+    @IBAction func refreshWeather(_ sender: AnyObject) {
+        toggleRefreshAnimation(on: true)
+        fetchCurrentWeather()
+    }
+    
+    func toggleRefreshAnimation(on: Bool) {
+        refreshButton.isHidden = on
+        
+        if on {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
 }
 
